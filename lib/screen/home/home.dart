@@ -103,7 +103,8 @@ class HomeScreen extends StatelessWidget {
                         textColor: Colors.white,
                         icon: Icons.arrow_forward_ios_rounded,
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>StartScreen()));
+                          Navigator.push(context, 
+                          MaterialPageRoute(builder: (_)=> const NewGameScreen()));
 
                           
                         },
