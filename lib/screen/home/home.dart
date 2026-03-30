@@ -1,5 +1,6 @@
+import 'package:family_time/screen/start/start.dart';
 import 'package:flutter/material.dart';
-
+// import 'package:family_time/screen/start/start.dart';
 import 'package:family_time/widgets/bottomnav.dart';
 
 // --- Mock AppColor (Replace with your actual import) ---
@@ -101,7 +102,11 @@ class HomeScreen extends StatelessWidget {
                         bgColor: AppColor.primary,
                         textColor: Colors.white,
                         icon: Icons.arrow_forward_ios_rounded,
-                        onPressed: () => print('Get Started Pressed'),
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>StartScreen()));
+
+                          
+                        },
                       ),
                       const SizedBox(height: 12),
                       _buildButton(
