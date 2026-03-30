@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
+class CustomBtn extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final Color backgroundColor;
   final IconData? icon;
+  final Color? color;
 
-  const Button({
+  const CustomBtn({
     super.key,
     required this.label,
     required this.onPressed,
     required this.backgroundColor,
     required this.icon,
+    required this.color,
   });
 
   @override
@@ -21,8 +23,8 @@ class Button extends StatelessWidget {
       child: icon != null
           ? ElevatedButton.icon(
               onPressed: onPressed,
-              icon: Icon(icon),
-              label: Text(label),
+              icon: Icon(icon, color: color),
+              label: Text(label, style: TextStyle(color: color)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor,
                 shape: RoundedRectangleBorder(
@@ -32,13 +34,14 @@ class Button extends StatelessWidget {
             )
           : ElevatedButton(
               onPressed: onPressed,
-              child: Text(label),
               style: ElevatedButton.styleFrom(
                 backgroundColor: backgroundColor,
+                
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
+              child: Text(label, style: TextStyle(color: color)),
             ),
     );
   }

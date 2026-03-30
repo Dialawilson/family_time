@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:family_time/constant/AppColor.dart';
 
 class Bottomnav extends StatelessWidget {
   const Bottomnav({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Padding(
-      padding: const EdgeInsets.all(10),
-      child: Container(
-        height: 60,
+    return  Container(
+     color: const Color.fromARGB(255, 215, 215, 215),
+      height: 50,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
           borderRadius: BorderRadiusGeometry.all( Radius.circular(20)),
           child: Container(
         color: const Color.fromARGB(255, 206, 46, 46),
             child: BottomNavigationBar(
               backgroundColor: const Color.fromARGB(0, 238, 164, 164),
-              selectedItemColor: Colors.deepPurpleAccent,
+              selectedItemColor: AppColor.primary,
               showSelectedLabels: false,
               showUnselectedLabels: false,
               type: BottomNavigationBarType.fixed,
