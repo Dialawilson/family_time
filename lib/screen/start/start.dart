@@ -1,4 +1,7 @@
+// import 'package:family_time/screen/home/home.dart' hide AppColor;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; //this will enable the fliter to get only numbers
+import 'package:family_time/constant/AppColor.dart';
 
 class NewGameScreen extends StatefulWidget {
   const NewGameScreen({super.key});
@@ -24,11 +27,11 @@ class _NewGameScreenState extends State<NewGameScreen> {
     {"title": "Story Builder", "icon": Icons.menu_book},
   ];
 
+
   @override
   void initState() {
     super.initState();
-    controllers[0].text = "Alex";
-    controllers[1].text = "Jordan";
+    controllers[0].text = "Wilson";
   }
 
   @override
@@ -40,7 +43,10 @@ class _NewGameScreenState extends State<NewGameScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              _header(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: _header(),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView(
@@ -56,9 +62,21 @@ class _NewGameScreenState extends State<NewGameScreen> {
                     ),
                     const SizedBox(height: 12),
                     _vibeGrid(),
+                    SizedBox(
+                        height: 13,
+                    ),
+                    const Text(
+                      "Select Number Of Questions",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    _questionNumber(),
                   ],
                 ),
               ),
+             
               _startButton(),
               const SizedBox(height: 12),
             ],
@@ -68,16 +86,23 @@ class _NewGameScreenState extends State<NewGameScreen> {
     );
   }
 
+// ========== WIDGET SECTION ========
+
   Widget _header() {
     return Row(
+        
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: const [
-        Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+      children:  [
+        IconButton(onPressed: (){
+            Navigator.pop(context);
+        }, 
+        color: AppColor.primary,
+        icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20,),),
         Text(
           "New Game",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
-        Icon(Icons.help_outline_rounded, size: 20),
+        Icon(Icons.help_outline_rounded, size: 20, color: AppColor.primary,),
       ],
     );
   }
@@ -138,7 +163,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
       borderRadius: BorderRadius.circular(20),
       child: Padding(
         padding: const EdgeInsets.all(6),
-        child: Icon(icon, size: 18, color: Colors.purple),
+        child: Icon(icon, size: 18, color: AppColor.primary),
       ),
     );
   }
@@ -164,49 +189,84 @@ class _NewGameScreenState extends State<NewGameScreen> {
     );
   }
 
-  Widget _vibeGrid() {
-    return Wrap(
-      spacing: 12,
-      runSpacing: 12,
-      children: vibes.map((vibe) {
-        final isSelected = selectedVibe == vibe["title"];
-        return GestureDetector(
-          onTap: () => setState(() => selectedVibe = vibe["title"]),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: MediaQuery.of(context).size.width / 2 - 22,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: isSelected ? Colors.purple : Colors.transparent,
-                width: 2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 3),
-                )
-              ],
+ Widget _vibeGrid() {
+  return Wrap(
+    spacing: 12,
+    runSpacing: 12,
+    children: vibes.asMap().entries.map((entry) {
+      final index = entry.key;
+      final vibe = entry.value;
+      final isSelected = selectedVibe == vibe["title"];
+      final isLast = index == vibes.length - 1;
+
+      return GestureDetector(
+        onTap: () => setState(() => selectedVibe = vibe["title"]),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: isLast
+              ? MediaQuery.of(context).size.width // full width for last item
+              : MediaQuery.of(context).size.width / 2 - 22, // half width for others
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: isSelected ? AppColor.primary : Colors.transparent,
+              width: 2,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(vibe["icon"], color: Colors.purple),
-                const SizedBox(height: 10),
-                Text(
-                  vibe["title"],
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              )
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(vibe["icon"], color: AppColor.primary),
+              const SizedBox(height: 10),
+              Text(
+                vibe["title"],
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList(),
+  );
+}
+Widget _questionNumber(){
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: [
+          TextField(
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+    FilteringTextInputFormatter.digitsOnly, // allows only digits
+  ],
+            // controller: controllers,
+            decoration: InputDecoration(
+              hintText: "Enter Number Questions",
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none,
+              ),
+              suffixIcon: const Icon(Icons.question_mark, size: 20, color: AppColor.primary,),
             ),
           ),
-        );
-      }).toList(),
+        ],
+      ),
     );
-  }
+}
+
 
   Widget _startButton() {
     return SizedBox(
@@ -215,7 +275,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: Colors.purple,
+          backgroundColor:AppColor.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -226,10 +286,10 @@ class _NewGameScreenState extends State<NewGameScreen> {
           children: [
             Text(
               "Start Playing",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
             ),
             SizedBox(width: 6),
-            Icon(Icons.play_arrow_rounded, size: 18)
+            Icon(Icons.play_arrow_rounded, size: 18, color: Colors.white,)
           ],
         ),
       ),
