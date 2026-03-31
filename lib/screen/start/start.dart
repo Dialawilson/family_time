@@ -1,4 +1,5 @@
 // import 'package:family_time/screen/home/home.dart' hide AppColor;
+import 'package:family_time/screen/question/question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; //this will enable the fliter to get only numbers
 import 'package:family_time/constant/AppColor.dart';
@@ -280,7 +281,9 @@ Widget _questionNumber(){
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_)=> const QuestionScreen()));
+        },
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
