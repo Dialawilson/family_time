@@ -1,3 +1,4 @@
+import 'package:family_time/screen/home/winner/winner.dart';
 import 'package:flutter/material.dart';
 import 'package:family_time/constant/AppColor.dart';
 
@@ -76,6 +77,10 @@ class _QuestionScreenState extends State<QuestionScreen> {
               _questionCard(),
               const SizedBox(height: 20),
               _voteSection(),
+              const SizedBox(height: 20),
+              ElevatedButton(onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const FinalResultsScreen()));
+              }, child: Text("result page")),
 
               const SizedBox(height: 15),
 
